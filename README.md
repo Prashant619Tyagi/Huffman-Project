@@ -10,7 +10,6 @@ public:
         char letter;
         HuffmanTree *left;
         HuffmanTree *right;
-
         HuffmanTree(int val, char c)
         {
             this->val = val;
@@ -27,7 +26,6 @@ vector<pair<int, char>> FrequencyDect(string s)
     {
         mp[s[i]]++;
     }
-
     vector<pair<int, char>> v;
     for(int i=0;i<s.size();i++)
     {
@@ -37,7 +35,6 @@ vector<pair<int, char>> FrequencyDect(string s)
             mp[s[i]]= 0;
        }
     }
-   
     cout<<"FrequencyMap -> "<<endl;
     for(int i=0;i<v.size();i++)
         {
@@ -65,24 +62,22 @@ void print(priority_queue<HuffmanTree*, vector<HuffmanTree*>,compare> q)
     }
     return;
 }
+
 HuffmanTree *makeTree(vector<pair<int, char>> &Freq) {
     priority_queue<HuffmanTree*, vector<HuffmanTree*>, compare> q;
     for (int i = 0; i < Freq.size(); ++i) {
         q.push(new HuffmanTree(Freq[i].first, Freq[i].second));
     }
-
     while (q.size() > 1) {
         HuffmanTree *l = q.top();
         q.pop();
         HuffmanTree *r = q.top();
         q.pop();
-
         HuffmanTree *sumNode = new HuffmanTree(l->val + r->val, '~');
         sumNode->left = l;
         sumNode->right = r;
         q.push(sumNode);
     }
-
     return q.top();
 }
 
@@ -90,12 +85,10 @@ void getCode(HuffmanTree *root, string s, map<char, string> &codevector) {
     if (!root) {
         return;
     }
-
     if (root->letter != '~') {
         codevector[root->letter] = s;
         return;
     }
-
     getCode(root->left, s + "0", codevector);
     getCode(root->right, s + "1", codevector);
 }
@@ -104,7 +97,6 @@ void getCode(HuffmanTree *root, string s, map<char, string> &codevector) {
 string encode(HuffmanTree *tree, string s) {
     map<char, string> codevector;
     getCode(tree, "", codevector);
-
     string res = "";
     for (auto i : s) {
         res += codevector[i];
@@ -133,20 +125,13 @@ string decode(HuffmanTree *tree, string encoded) {
 int main() {
     string s;
     getline(cin, s);
-
     vector<pair<int, char>> Freq = FrequencyDect(s);
-
     HuffmanTree *tree = makeTree(Freq);
-
     string encoded = encode(tree, s);
-
     cout<<"Given String :-> "<<s<<endl;
     cout << "Huffman Code for the given string is :-> " << encoded << endl;
-
     string decoded = decode(tree, encoded);
-
     cout << "Decoded string :-> " << decoded << endl;
-
     return 0;
 }
 
